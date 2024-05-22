@@ -1,0 +1,26 @@
+name: tic-tac-toe
+
+services:
+  backend:
+    image: backend:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - net
+    environment:
+      - CLIENT_URL=http://localhost
+    
+  frontend:
+    image: frontend:latest
+    ports:
+      - "80:80"
+    networks:
+      - net
+    environment:
+      - REACT_APP_SERVER_URL=http://localhost:3000
+    depends_on:
+      - backend
+
+networks:
+  net:
+    driver: bridge
