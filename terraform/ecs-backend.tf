@@ -30,6 +30,8 @@ resource "aws_ecs_task_definition" "ttt_backend_task" {
       }
     ]
   )
+  execution_role_arn = "arn:aws:iam::740943611122:role/LabRole"
+  task_role_arn = "arn:aws:iam::740943611122:role/LabRole"
 }
 
 resource "aws_ecs_service" "ttt_backend_service" {
@@ -40,7 +42,7 @@ resource "aws_ecs_service" "ttt_backend_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]
+    subnets          = [aws_subnet.private_subnet_1.id]
     assign_public_ip = true
     security_groups  = [aws_security_group.ttt_ecs_backend_sg.id]
   }
@@ -56,7 +58,7 @@ resource "aws_alb" "ttt_backend_alb" {
   name               = "ttt-backend-alb"
   load_balancer_type = "application"
   internal           = true
-  subnets            = [aws_subnet.private_subnet.id]            
+  subnets            = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id]       
   security_groups    = [aws_security_group.ttt_alb_sg.id]
 }
 
@@ -87,3 +89,5 @@ resource "aws_lb_listener" "ttt_backend_listener" {
     target_group_arn = aws_lb_target_group.ttt_backend_tg.arn
   }
 }
+
+output "backend_url" { value = aws_alb.ttt_backend_alb.dns_name }

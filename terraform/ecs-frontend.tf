@@ -30,6 +30,8 @@ resource "aws_ecs_task_definition" "ttt_frontend_task" {
       }
     ]
   )
+  execution_role_arn = "arn:aws:iam::740943611122:role/LabRole"
+  task_role_arn = "arn:aws:iam::740943611122:role/LabRole"
 }
 
 resource "aws_ecs_service" "ttt_frontend_service" {
@@ -40,7 +42,7 @@ resource "aws_ecs_service" "ttt_frontend_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = [aws_subnet.public_subnet.id]
+    subnets          = [aws_subnet.private_subnet_1.id]
     assign_public_ip = true
     security_groups  = [aws_security_group.ttt_ecs_frontend_sg.id]
   }
@@ -55,7 +57,7 @@ resource "aws_ecs_service" "ttt_frontend_service" {
 resource "aws_alb" "ttt_frontend_alb" {
   name               = "ttt-frontend-alb"
   load_balancer_type = "application"
-  subnets            = [aws_subnet.private_subnet.id]
+  subnets            = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
   security_groups    = [aws_security_group.ttt_alb_sg.id]
 }
 
@@ -86,3 +88,5 @@ resource "aws_lb_listener" "ttt_frontend_listener" {
     target_group_arn = aws_lb_target_group.ttt_frontend_tg.arn
   }
 }
+
+output "frontend_url" { value = aws_alb.ttt_frontend_alb.dns_name }
