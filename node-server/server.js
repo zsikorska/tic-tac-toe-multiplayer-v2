@@ -1,5 +1,6 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+require('dotenv').config();
 
 const httpServer = createServer();
 httpServer.listen(3000);
