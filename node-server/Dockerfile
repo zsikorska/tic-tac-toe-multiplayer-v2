@@ -8,6 +8,10 @@ RUN npm install
 
 COPY . .
 
+ARG FRONTEND_URL 
+
+ENV FRONTEND_URL=$FRONTEND_URL
+
 EXPOSE 3000
 
 CMD ["node", "server.js"]
