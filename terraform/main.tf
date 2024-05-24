@@ -6,8 +6,3 @@ terraform {
     }
   }
 }
-
-provider "aws" {
-  shared_config_files      = ["C:/Users/sikor/.aws/config"]
-  shared_credentials_files = ["C:/Users/sikor/.aws/credentials"]
-}
