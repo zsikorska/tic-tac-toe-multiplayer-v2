@@ -4,7 +4,7 @@ ENV PORT 80
 
 WORKDIR /app
 
-COPY package*.json .
+COPY client/package*.json .
 
 RUN npm install
 
