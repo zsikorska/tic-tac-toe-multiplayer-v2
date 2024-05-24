@@ -18,15 +18,6 @@ resource "aws_ecs_task_definition" "ttt_frontend_task" {
         ],
         memory = 512
         cpu    = 256
-        logConfiguration = {
-          logDriver = "awslogs"
-          options = {
-            awslogs-group         = "ttt_frontend"
-            awslogs-region        = "eu-east-1"
-            awslogs-create-group  = "true"
-            awslogs-stream-prefix = "ttt_frontend"
-          }
-        }
       }
     ]
   )
