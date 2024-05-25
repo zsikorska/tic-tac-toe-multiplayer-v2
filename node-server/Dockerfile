@@ -6,7 +6,7 @@ COPY node-server/package*.json .
 
 RUN npm install
 
-COPY client/ .
+COPY node-server/ .
 
 ARG FRONTEND_URL 
 
