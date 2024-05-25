@@ -61,8 +61,7 @@ resource "aws_ecs_service" "ttt_backend_service" {
 resource "aws_alb" "ttt_backend_alb" {
   name               = "ttt-backend-alb"
   load_balancer_type = "application"
-  internal           = true
-  subnets            = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id]       
+  subnets            = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]  
   security_groups    = [aws_security_group.ttt_alb_sg.id]
 }
 
