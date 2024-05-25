@@ -18,9 +18,22 @@ resource "aws_ecs_task_definition" "ttt_backend_task" {
         ],
         memory = 512
         cpu    = 256
+        logConfiguration = {
+          logDriver = "awslogs"
+          options = {
+            awslogs-group         = "ttt_backend"
+            awslogs-region        = "eu-east-1"
+            awslogs-create-group  = "true"
+            awslogs-stream-prefix = "ttt_backend"
+          }
+        }
       }
     ]
   )
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture = "X86_64"
+  }
   execution_role_arn = "arn:aws:iam::740943611122:role/LabRole"
   task_role_arn = "arn:aws:iam::740943611122:role/LabRole"
 }
