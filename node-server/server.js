@@ -14,6 +14,14 @@ const io = new Server(httpServer, {
 const allUsers = {};
 const allRooms = [];
 
+httpServer.on("request", (req, res) => {
+    if (req.url === "/") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.write(JSON.stringify({ status: "ok" }));
+        res.end();
+    }
+});
+
 io.on("connection", (socket) => {
     allUsers[socket.id] = {
         socket: socket,
