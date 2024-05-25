@@ -30,10 +30,6 @@ resource "aws_ecs_task_definition" "ttt_frontend_task" {
       }
     ]
   )
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture = "X86_64"
-  }
   execution_role_arn = "arn:aws:iam::740943611122:role/LabRole"
   task_role_arn = "arn:aws:iam::740943611122:role/LabRole"
 }
@@ -85,8 +81,10 @@ resource "aws_lb_target_group" "ttt_frontend_tg" {
 
 resource "aws_lb_listener" "ttt_frontend_listener" {
   load_balancer_arn = aws_alb.ttt_frontend_alb.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.cert_arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ttt_frontend_tg.arn
