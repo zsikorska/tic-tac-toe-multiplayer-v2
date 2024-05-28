@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "ttt_backend_task" {
           logDriver = "awslogs"
           options = {
             awslogs-group         = "ttt_backend"
-            awslogs-region        = "eu-east-1"
+            awslogs-region        = "us-east-1"
             awslogs-create-group  = "true"
             awslogs-stream-prefix = "ttt_backend"
           }
@@ -43,7 +43,6 @@ resource "aws_ecs_service" "ttt_backend_service" {
 
   network_configuration {
     subnets          = [aws_subnet.private_subnet_1.id]
-    assign_public_ip = true
     security_groups  = [aws_security_group.ttt_ecs_backend_sg.id]
   }
 
