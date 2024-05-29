@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import Square from "./Square";
 import {io} from "socket.io-client";
 import Swal from "sweetalert2";
+import handleSignOut from "./util/Logout";
+import {useNavigate} from "react-router-dom";
 
 const renderFrom = [
     [1, 2, 3],
@@ -20,6 +22,7 @@ const Game = () => {
     const [opponentName, setOpponentName] = useState(null);
     const [playingAs, setPlayingAs] = useState(null);
     const [isNewGame, setIsNewGame] = useState(false);
+    const navigate = useNavigate();
 
     const checkWinner = () => {
         // row dynamic
@@ -164,6 +167,22 @@ const Game = () => {
         setIsNewGame(true);
     }
 
+    function closeSocket() {
+        if (socket) {
+            socket.disconnect();
+        }
+    }
+
+    function goBackToDashboard() {
+        closeSocket();
+        navigate('/dashboard');
+    }
+
+    function signOut() {
+        closeSocket();
+        handleSignOut(navigate)
+    }
+
     if (!playOnline) {
         return (
             <div className="main-div">
@@ -176,86 +195,98 @@ const Game = () => {
 
     if (playOnline && !opponentName) {
         return (
-            <div className="waiting">
-                <p>Waiting for opponent</p>
+            <div>
+                <div className="button-container">
+                    <button onClick={goBackToDashboard} className="signOutButton">Go back to dashboard</button>
+                    <button onClick={signOut} className="signOutButton">Sign Out</button>
+                </div>
+                <div className="waiting">
+                    <p>Waiting for opponent</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="main-div">
-            <h1 className="game-heading water-background">Tic-tac-toe</h1>
-            {!finishedState && opponentName && (
-                <h2>You are playing against {opponentName}</h2>
-            )}
-            {finishedState && finishedState === "opponentLeftMatch" && (
-                <h2>Opponent has left the game</h2>
-            )}
-            {finishedState &&
-                finishedState !== "opponentLeftMatch" &&
-                finishedState !== "draw" && (
-                    <h3 className="finished-state">
-                        {finishedState === playingAs ? "You " : "Your opponent"} won the
-                        game
-                    </h3>
-                )}
-            {finishedState &&
-                finishedState !== "opponentLeftMatch" &&
-                finishedState === "draw" && (
-                    <h3 className="finished-state">It's a Draw</h3>
-                )}
-            {!finishedState && opponentName && (
-                <h2>
-                    {currentPlayer === playingAs
-                        ? "Your turn"
-                        : "Your opponent's turn"}
-                </h2>
-            )}
-
-            <div className="move-detection">
-                <div
-                    className={`left ${!finishedState &&
-                    currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
-                    }`}
-                >
-                    {playerName}: {playingAs === "circle" ? "O" : "X"}
-                </div>
-                <div
-                    className={`right ${!finishedState &&
-                    currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
-                    }`}
-                >
-                    {opponentName}: {playingAs === "circle" ? "X" : "O"}
-                </div>
+        <div>
+            <div className="button-container">
+                <button onClick={goBackToDashboard} className="signOutButton">Go back to dashboard</button>
+                <button onClick={signOut} className="signOutButton">Sign Out</button>
             </div>
-            <div>
-                <div className="square-wrapper">
-                    {gameState.map((arr, rowIndex) =>
-                        arr.map((e, colIndex) => {
-                            return (
-                                <Square
-                                    socket={socket}
-                                    playingAs={playingAs}
-                                    gameState={gameState}
-                                    finishedArrayState={finishedArrayState}
-                                    finishedState={finishedState}
-                                    currentPlayer={currentPlayer}
-                                    setCurrentPlayer={setCurrentPlayer}
-                                    setGameState={setGameState}
-                                    id={rowIndex * 3 + colIndex}
-                                    key={rowIndex * 3 + colIndex}
-                                    currentElement={e}
-                                />
-                            );
-                        })
+            <div className="main-div">
+                <h1 className="game-heading water-background">Tic-tac-toe</h1>
+                {!finishedState && opponentName && (
+                    <h2>You are playing against {opponentName}</h2>
+                )}
+                {finishedState && finishedState === "opponentLeftMatch" && (
+                        <h2>Opponent has left the game</h2>
+                    )}
+                    {finishedState &&
+                        finishedState !== "opponentLeftMatch" &&
+                        finishedState !== "draw" && (
+                            <h3 className="finished-state">
+                                {finishedState === playingAs ? "You " : "Your opponent"} won the
+                                game
+                            </h3>
+                        )}
+                    {finishedState &&
+                        finishedState !== "opponentLeftMatch" &&
+                        finishedState === "draw" && (
+                            <h3 className="finished-state">It's a Draw</h3>
+                        )}
+                    {!finishedState && opponentName && (
+                        <h2>
+                            {currentPlayer === playingAs
+                                ? "Your turn"
+                                : "Your opponent's turn"}
+                        </h2>
+                    )}
+
+                    <div className="move-detection">
+                        <div
+                            className={`left ${!finishedState &&
+                            currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
+                            }`}
+                        >
+                            {playerName}: {playingAs === "circle" ? "O" : "X"}
+                        </div>
+                        <div
+                            className={`right ${!finishedState &&
+                            currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
+                            }`}
+                        >
+                            {opponentName}: {playingAs === "circle" ? "X" : "O"}
+                        </div>
+                    </div>
+                    <div>
+                        <div className="square-wrapper">
+                            {gameState.map((arr, rowIndex) =>
+                                arr.map((e, colIndex) => {
+                                    return (
+                                        <Square
+                                            socket={socket}
+                                            playingAs={playingAs}
+                                            gameState={gameState}
+                                            finishedArrayState={finishedArrayState}
+                                            finishedState={finishedState}
+                                            currentPlayer={currentPlayer}
+                                            setCurrentPlayer={setCurrentPlayer}
+                                            setGameState={setGameState}
+                                            id={rowIndex * 3 + colIndex}
+                                            key={rowIndex * 3 + colIndex}
+                                            currentElement={e}
+                                        />
+                                    );
+                                })
+                            )}
+                        </div>
+                    </div>
+                    {finishedState && (
+                        <button onClick={playAgainClick} className="playAgain">
+                            Play again with a random player
+                        </button>
                     )}
                 </div>
-            </div>
-            {finishedState && (
-                <button onClick={playAgainClick} className="playAgain">
-                    Play again with a random player
-                </button>
-            )}
         </div>
     );
 };

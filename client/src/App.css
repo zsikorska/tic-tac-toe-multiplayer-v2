@@ -21,6 +21,18 @@ body {
   flex-direction: row;
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.right-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
 .homeButton {
   font-weight: 700;
   border: none;
@@ -46,7 +58,19 @@ body {
   outline: none;
   background-color: #7a40bb;
   color: #dcdbdb;
-  margin: 40vh 2vh 0;
+  margin: 30vh 2vh 0;
+}
+
+.signOutButton {
+  font-weight: 700;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  border-radius: 5px;
+  outline: none;
+  background-color: #7a40bb;
+  color: #dcdbdb;
+  margin: 2vh 2vh 2vh;
 }
 
 .playAgain {
@@ -114,6 +138,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: -1;
 }
 
 .current-move-cross {
