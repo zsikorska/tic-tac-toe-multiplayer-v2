@@ -118,7 +118,7 @@ body {
 .left,
 .right {
   height: 30px;
-  width: 120px;
+  width: 100%;
   color: #170505;
   padding-top: 7px;
   font-size: 30px;
