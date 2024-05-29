@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Square from "./Square";
 import {io} from "socket.io-client";
-import Swal from "sweetalert2";
 import handleSignOut from "./util/Logout";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
@@ -18,7 +17,6 @@ const Game = () => {
     const [currentPlayer, setCurrentPlayer] = useState("circle");
     const [finishedState, setFinishedState] = useState(false);
     const [finishedArrayState, setFinishedArrayState] = useState([]);
-    const [playOnline, setPlayOnline] = useState(false);
     const [socket, setSocket] = useState(null);
     const [playerName, setPlayerName] = useState("");
     const [opponentName, setOpponentName] = useState(null);
@@ -81,21 +79,6 @@ const Game = () => {
         }
     }, [gameState]);
 
-    const takePlayerName = async () => {
-        const result = await Swal.fire({
-            title: "Enter your name",
-            input: "text",
-            showCancelButton: true,
-            inputValidator: (value) => {
-                if (!value) {
-                    return "You need to write something!";
-                }
-            },
-        });
-
-        return result;
-    };
-
     socket?.on("opponentLeftMatch", () => {
         setFinishedState("opponentLeftMatch");
     });
@@ -110,10 +93,6 @@ const Game = () => {
             return newState;
         });
         setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
-    });
-
-    socket?.on("connect", function () {
-        setPlayOnline(true);
     });
 
     socket?.on("OpponentNotFound", function () {
@@ -144,17 +123,11 @@ const Game = () => {
         setSocket(newSocket);
     }
 
-    async function playOnlineClick() {
-        const result = await takePlayerName();
-
-        if (!result.isConfirmed) {
-            return;
-        }
-
-        const username = result.value;
-        setPlayerName(username);
+    useEffect(() => {
+        setPlayerName(Cookies.get("USERNAME"));
         setIsNewGame(true);
-    }
+        console.log("Player name:", Cookies.get("USERNAME"));
+    }, []);
 
     useEffect(() => {
         if (isNewGame) {
@@ -171,7 +144,6 @@ const Game = () => {
         setCurrentPlayer("circle");
         setOpponentName(null);
         setPlayingAs(null);
-        setPlayOnline(false);
         setIsNewGame(true);
     }
 
@@ -191,17 +163,7 @@ const Game = () => {
         handleSignOut(navigate)
     }
 
-    if (!playOnline) {
-        return (
-            <div className="main-div">
-                <button onClick={playOnlineClick} className="homeButton">
-                    Play Tic-tac-toe with a random player
-                </button>
-            </div>
-        );
-    }
-
-    if (playOnline && !opponentName) {
+if (!opponentName) {
         return (
             <div>
                 <div className="button-container">
