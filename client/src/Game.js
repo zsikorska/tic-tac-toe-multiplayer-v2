@@ -4,6 +4,8 @@ import {io} from "socket.io-client";
 import Swal from "sweetalert2";
 import handleSignOut from "./util/Logout";
 import {useNavigate} from "react-router-dom";
+import Cookies from "js-cookie";
+import refreshSession from "./util/RefreshSession";
 
 const renderFrom = [
     [1, 2, 3],
@@ -123,10 +125,16 @@ const Game = () => {
         setOpponentName(data.opponentName);
     });
 
-
     function connectToServer() {
+        if (!Cookies.get("COGNITO_TOKEN")) {
+            refreshSession();
+        }
+
         const newSocket = io(process.env.REACT_APP_BACKEND_URL, {
             autoConnect: true,
+            auth: {
+                token: Cookies.get("COGNITO_TOKEN")
+            }
         });
 
         newSocket?.emit("request_to_play", {

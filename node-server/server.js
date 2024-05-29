@@ -1,5 +1,6 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const {CognitoJwtVerifier} = require("aws-jwt-verify");
 require('dotenv').config();
 
 const httpServer = createServer();
@@ -9,6 +10,12 @@ const io = new Server(httpServer, {
         origin: process.env.FRONTEND_URL,
         methods: ["GET", "POST"]
     },
+});
+
+const verifier = CognitoJwtVerifier.create({
+    userPoolId: process.env.COGNITO_USER_POOL_ID,
+    tokenUse: "access",
+    clientId: process.env.COGNITO_CLIENT_ID,
 });
 
 const allUsers = {};
@@ -22,7 +29,16 @@ httpServer.on("request", (req, res) => {
     }
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
+    const token = socket.handshake.auth.token;
+    try {
+        const payload = await verifier.verify(token);
+        console.log("Token is valid. Payload:", payload);
+    } catch {
+        console.log("Token not valid!");
+        socket.disconnect();
+    }
+
     allUsers[socket.id] = {
         socket: socket,
         online: true,
@@ -86,7 +102,7 @@ io.on("connection", (socket) => {
         currentUser.playing = false;
 
         for (let index = 0; index < allRooms.length; index++) {
-            const { player1, player2 } = allRooms[index];
+            const {player1, player2} = allRooms[index];
 
             if (player1.socket.id === socket.id) {
                 allRooms.splice(index, 1);

@@ -20,11 +20,12 @@ output "ttt_user_pool_id" {
 resource "aws_cognito_user_pool_client" "ttt_user_pool_client" {
   name                                 = "ttt_user_pool_client"
   user_pool_id                         = aws_cognito_user_pool.ttt_user_pool.id
-  callback_urls                        = ["http://localhost:80", "https://${var.frontend_domain}"]
+  callback_urls                        = ["http://localhost:3001", "https://${var.frontend_domain}"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code", "implicit"]
   allowed_oauth_scopes                 = ["email", "openid"]
   supported_identity_providers         = ["COGNITO"]
+  refresh_token_validity               = 30
 }
 
 output "ttt_user_pool_client_id" {
