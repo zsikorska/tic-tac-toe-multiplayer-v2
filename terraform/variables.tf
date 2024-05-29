@@ -7,5 +7,5 @@ variable "cert_arn" {
 /* Frontend Domain */
 variable "frontend_domain" {
   type = string
-  default = "play.ttt-multiplayer.com"
+  default = "play.ttt-multiplayer.fun"
 }

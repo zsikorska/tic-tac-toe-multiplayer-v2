@@ -13,7 +13,27 @@ body {
   flex-direction: column;
 }
 
-.playOnline {
+.dashboard-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5vh;
+  flex-direction: row;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.right-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.homeButton {
   font-weight: 700;
   border: none;
   font-size: 50px;
@@ -26,6 +46,31 @@ body {
   color: #dcdbdb;
   margin-left: 5vh;
   margin-right: 5vh;
+}
+
+.dashboardButton {
+  font-weight: 700;
+  border: none;
+  font-size: 50px;
+  cursor: pointer;
+  padding: 6px 40px;
+  border-radius: 5px;
+  outline: none;
+  background-color: #7a40bb;
+  color: #dcdbdb;
+  margin: 30vh 2vh 0;
+}
+
+.signOutButton {
+  font-weight: 700;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  border-radius: 5px;
+  outline: none;
+  background-color: #7a40bb;
+  color: #dcdbdb;
+  margin: 2vh 2vh 2vh;
 }
 
 .playAgain {
@@ -93,6 +138,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: -1;
 }
 
 .current-move-cross {
@@ -101,4 +147,11 @@ body {
 
 .current-move-circle {
   color: #7a40bb !important;
+}
+
+.active {
+  background-color: #7a40bb !important;
+  color: #dcdbdb !important;
+  border-color: #7a40bb !important;
+  border-radius: 3px;
 }
