@@ -13,7 +13,15 @@ body {
   flex-direction: column;
 }
 
-.playOnline {
+.dashboard-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5vh;
+  flex-direction: row;
+}
+
+.homeButton {
   font-weight: 700;
   border: none;
   font-size: 50px;
@@ -26,6 +34,19 @@ body {
   color: #dcdbdb;
   margin-left: 5vh;
   margin-right: 5vh;
+}
+
+.dashboardButton {
+  font-weight: 700;
+  border: none;
+  font-size: 50px;
+  cursor: pointer;
+  padding: 6px 40px;
+  border-radius: 5px;
+  outline: none;
+  background-color: #7a40bb;
+  color: #dcdbdb;
+  margin: 40vh 2vh 0;
 }
 
 .playAgain {
@@ -101,4 +122,11 @@ body {
 
 .current-move-circle {
   color: #7a40bb !important;
+}
+
+.active {
+  background-color: #7a40bb !important;
+  color: #dcdbdb !important;
+  border-color: #7a40bb !important;
+  border-radius: 3px;
 }
