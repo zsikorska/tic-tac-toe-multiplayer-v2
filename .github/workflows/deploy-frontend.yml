@@ -51,11 +51,16 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           BACKEND_URL: ${{ vars.BACKEND_URL }}
+          COGNITO_URL: ${{ vars.COGNITO_URL }}
+          COGNITO_USER_POOL_ID: ${{ vars.COGNITO_USER_POOL_ID }}
+          COGNITO_CLIENT_ID: ${{ vars.COGNITO_CLIENT_ID }}
+          COGNITO_TOKEN_URL: ${{ vars.COGNITO_TOKEN_URL }}
+          COGNITO_REDIRECT_URL: ${{ vars.COGNITO_REDIRECT_URL }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build --build-arg BACKEND_URL=$BACKEND_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f client/Dockerfile .
+          docker build --build-arg BACKEND_URL=$BACKEND_URL --build-arg COGNITO_URL=$COGNITO_URL --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_TOKEN_URL=$COGNITO_TOKEN_URL --build-arg COGNITO_REDIRECT_URL=$COGNITO_REDIRECT_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f client/Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
 
