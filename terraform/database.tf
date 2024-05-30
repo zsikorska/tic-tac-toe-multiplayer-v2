@@ -8,7 +8,7 @@ resource "aws_db_instance" "ttt_db_instance" {
   db_name    = "ttt_db"
 
   engine            = "postgres"
-  engine_version    = "15.4"
+  engine_version    = "16.3"
   instance_class    = "db.t3.micro"
   storage_type      = "gp2"
   allocated_storage = 10
