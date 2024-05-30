@@ -20,7 +20,13 @@ const client = new Client(dbConfig);
 
 function connectToDb() {
     client.connect()
-        .then(() => console.log('Connected to database'))
+        .then(() => {
+            console.log('Connected to database');
+            client.query("SET TIME ZONE 'Europe/Warsaw'");
+        })
+        .then(() => {
+            console.log('Timezone set to Europe/Warsaw');
+        })
         .catch(e => console.error('Database connection error', e.stack))
 }
 
@@ -46,7 +52,7 @@ function initDb() {
 
 const insertMatchQuery = `
     INSERT INTO match (circle_player, cross_player, winner, created_at)
-    VALUES ($1, $2, $3, NOW() AT TIME ZONE 'Europe/Warsaw')
+    VALUES ($1, $2, $3, NOW())
     RETURNING *;
 `;
 

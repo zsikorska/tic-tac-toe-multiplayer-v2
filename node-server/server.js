@@ -127,7 +127,7 @@ io.on("connection", async (socket) => {
     const token = socket.handshake.auth.token;
     try {
         const payload = await verifier.verify(token);
-        console.log("Token is valid. Payload:", payload);
+        console.log("Token is valid");
     } catch {
         console.log("Token not valid!");
         socket.disconnect();
