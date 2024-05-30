@@ -70,7 +70,7 @@ const History = () => {
                                     <td>{match.circle_player}</td>
                                     <td>{match.cross_player}</td>
                                     <td>{match.winner}</td>
-                                    <td>{new Date(match.created_at).toLocaleString()}</td>
+                                    <td>{new Date(match.adjusted_created_at).toLocaleString()}</td>
                                 </tr>
                             ))}
                             </tbody>

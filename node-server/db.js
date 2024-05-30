@@ -22,10 +22,6 @@ function connectToDb() {
     client.connect()
         .then(() => {
             console.log('Connected to database');
-            client.query("SET TIME ZONE 'Europe/Warsaw'");
-        })
-        .then(() => {
-            console.log('Timezone set to Europe/Warsaw');
         })
         .catch(e => console.error('Database connection error', e.stack))
 }
@@ -61,7 +57,8 @@ function insertMatch(circlePlayer, crossPlayer, winner) {
 }
 
 const selectMatchesByPlayerQuery = `
-    SELECT * FROM match
+    SELECT id, circle_player, cross_player, winner, created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Warsaw' AS adjusted_created_at
+    FROM match
     WHERE circle_player = $1 OR cross_player = $1;
 `;
 
