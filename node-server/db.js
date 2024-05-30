@@ -48,7 +48,7 @@ function initDb() {
 
 const insertMatchQuery = `
     INSERT INTO match (circle_player, cross_player, winner, created_at)
-    VALUES ($1, $2, $3, NOW() AT TIME ZONE 'Europe/Warsaw')
+    VALUES ($1, $2, $3, NOW())
     RETURNING *;
 `;
 
