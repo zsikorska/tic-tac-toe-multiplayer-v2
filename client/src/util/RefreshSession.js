@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
 function refreshSession() {
-    const tokenEndpoint = process.env.REACT_APP_COGNITO_TOKEN
+    const tokenEndpoint = process.env.REACT_APP_COGNITO_TOKEN_URL;
     const cognitoClientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
 
     const headers = {

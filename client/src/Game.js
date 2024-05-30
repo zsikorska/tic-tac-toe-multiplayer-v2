@@ -5,6 +5,7 @@ import handleSignOut from "./util/Logout";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 import refreshSession from "./util/RefreshSession";
+import axios from "axios";
 
 const renderFrom = [
     [1, 2, 3],
@@ -72,10 +73,44 @@ const Game = () => {
         return null;
     };
 
+    function addMatchToDb(winner) {
+        if (!Cookies.get("COGNITO_TOKEN")) {
+            refreshSession();
+        }
+        const token = Cookies.get("COGNITO_TOKEN");
+
+        const match = {
+            circle_player: playingAs === "circle" ? playerName : opponentName,
+            cross_player: playingAs === "cross" ? playerName : opponentName,
+            winner: winner,
+        };
+
+        const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
+        axios.post(`${BASE_URL}/match`, match, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     useEffect(() => {
         const winner = checkWinner();
         if (winner) {
-            setFinishedState(winner);
+            setFinishedState(winner)
+            if (playingAs === "circle") {
+                if (winner === "draw")
+                    addMatchToDb("-");
+                else
+                    addMatchToDb(winner === "circle" ? playerName : opponentName);
+            }
         }
     }, [gameState]);
 

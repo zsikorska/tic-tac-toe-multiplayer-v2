@@ -66,3 +66,23 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_from_frontend_i
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
+
+resource "aws_security_group" "ttt_db_sg" {
+  name        = "ttt_db_sg"
+  description = "Security group for RDS"
+  vpc_id      = aws_vpc.ttt_vpc.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_traffic_from_ecs_backend_to_rds_ipv4" {
+  security_group_id = aws_security_group.ttt_db_sg.id
+  referenced_security_group_id = aws_security_group.ttt_ecs_backend_sg.id
+  from_port         = 5432
+  ip_protocol       = "tcp"
+  to_port           = 5432
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_from_rds_ipv4" {
+  security_group_id = aws_security_group.ttt_db_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}

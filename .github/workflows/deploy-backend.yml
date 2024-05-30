@@ -53,11 +53,16 @@ jobs:
           FRONTEND_URL: ${{ vars.FRONTEND_URL }}
           COGNITO_USER_POOL_ID: ${{ vars.COGNITO_USER_POOL_ID }}
           COGNITO_CLIENT_ID: ${{ vars.COGNITO_CLIENT_ID }}
+          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+          POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build --build-arg FRONTEND_URL=$FRONTEND_URL --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f node-server/Dockerfile .
+          docker build --build-arg FRONTEND_URL=$FRONTEND_URL --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg POSTGRES_USER=$POSTGRES_USER --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD --build-arg POSTGRES_HOST=$POSTGRES_HOST --build-arg POSTGRES_DB=$POSTGRES_DB --build-arg POSTGRES_PORT=$POSTGRES_PORT -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f node-server/Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
 
