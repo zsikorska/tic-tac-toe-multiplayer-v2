@@ -5,15 +5,20 @@ import History from "./History";
 import Unauthorized from "./Unauthorized";
 import Missing from "./Missing";
 import Dashboard from "./Dashboard";
+import RequireAuth from "./util/RequireAuth";
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/history" element={<History />} />
-                <Route path="/game" element={<Game />} />
+
+                <Route element={<RequireAuth />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/history" element={<History />} />
+                    <Route path="/game" element={<Game />} />
+                </Route>
+
                 <Route path="/unauthorized" element={<Unauthorized />} />
                 <Route path={"*"} element={<Missing />} />
             </Routes>
