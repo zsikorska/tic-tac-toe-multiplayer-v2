@@ -48,7 +48,7 @@ function initDb() {
 
 const insertMatchQuery = `
     INSERT INTO match (circle_player, cross_player, winner, created_at)
-    VALUES ($1, $2, $3, NOW())
+    VALUES ($1, $2, $3, NOW() AT TIME ZONE 'Europe/Warsaw')
     RETURNING *;
 `;
 
@@ -57,8 +57,7 @@ function insertMatch(circlePlayer, crossPlayer, winner) {
 }
 
 const selectMatchesByPlayerQuery = `
-    SELECT id, circle_player, cross_player, winner, created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Warsaw' AS adjusted_created_at
-    FROM match
+    SELECT * FROM match
     WHERE circle_player = $1 OR cross_player = $1;
 `;
 
