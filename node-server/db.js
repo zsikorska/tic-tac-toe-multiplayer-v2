@@ -1,12 +1,18 @@
 const { Client } = require('pg');
 require('dotenv').config();
+const fs = require('fs');
 
 const dbConfig = {
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     port: process.env.POSTGRES_PORT,
     host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DB
+    database: process.env.POSTGRES_DB,
+    ssl: {
+        require: true,
+        rejectUnauthorized: true,
+        ca: fs.readFileSync('cert/us-east-1-bundle.pem').toString()
+    }
 };
 
 const client = new Client(dbConfig);
