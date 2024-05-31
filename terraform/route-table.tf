@@ -24,11 +24,6 @@ resource "aws_route_table_association" "ttt_public_subnet_2_association" {
 resource "aws_route_table" "ttt_private_route_table" {
   vpc_id = aws_vpc.ttt_vpc.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.ttt_nat_gateway.id
-  }
-
   tags = {
     Name = "ttt_private_route_table"
   }

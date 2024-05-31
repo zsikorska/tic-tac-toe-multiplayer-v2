@@ -4,15 +4,6 @@ resource "aws_security_group" "ttt_alb_sg" {
   vpc_id      = aws_vpc.ttt_vpc.id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
-  security_group_id = aws_security_group.ttt_alb_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  ip_protocol       = "tcp"
-  to_port           = 80
-}
-
-
 resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4" {
   security_group_id = aws_security_group.ttt_alb_sg.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -35,7 +26,7 @@ resource "aws_security_group" "ttt_ecs_backend_sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_traffic_from_alb_to_backend_ipv4" {
   security_group_id = aws_security_group.ttt_ecs_backend_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  referenced_security_group_id = aws_security_group.ttt_alb_sg.id
   from_port         = 3000
   ip_protocol       = "tcp"
   to_port           = 3000
@@ -55,7 +46,7 @@ resource "aws_security_group" "ttt_ecs_frontend_sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_traffic_from_alb_to_frontend_ipv4" {
   security_group_id = aws_security_group.ttt_ecs_frontend_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  referenced_security_group_id = aws_security_group.ttt_alb_sg.id
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
